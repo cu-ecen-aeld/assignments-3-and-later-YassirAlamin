@@ -1,5 +1,10 @@
 #include "systemcalls.h"
-
+#include <stdlib.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <unistd.h>
+#include <errno.h>
+#include <fcntl.h>
 /**
  * @param cmd the command to execute with system()
  * @return true if the command in @param cmd was executed
@@ -16,7 +21,10 @@ bool do_system(const char *cmd)
  *   and return a boolean true if the system() call completed with success
  *   or false() if it returned a failure
 */
-
+    int rn = system(cmd);
+    if(rn == -1){
+    	return false;
+    }
     return true;
 }
 
@@ -58,9 +66,40 @@ bool do_exec(int count, ...)
  *   as second argument to the execv() command.
  *
 */
+    printf("\r\n-----------------\r\n");fflush(stdout);
+
+    pid_t pid;
+    pid  = fork();
+    
+    if(pid == 0){
+	for(int i=0;i<count;i++){
+	    printf("cmd[%d]:%s\r\n",i,command[i]);fflush(stdout);
+	}
+	printf("\r\n[Child]\t");fflush(stdout);
+    	int rn = execv(command[0],command);
+	printf("rn:%d\t",rn);fflush(stdout);
+	if(rn == -1){
+	    printf("nexecv() Error:%d",rn);fflush(stdout);
+	    return false;
+	}
+	printf("\r\n.\r\n");fflush(stdout);
+    } else{
+	int pstatus,ret;
+        ret = waitpid(pid,&pstatus,0);
+	printf("\r\n[parent] pid:%d ret:%d errno:%d\r\n",pid,ret,errno);fflush(stdout);
+	if(ret == -1){
+	    printf("\r\nwait() Error:%d\r\n",ret);fflush(stdout);
+	    return false;
+	}
+    }
+    if(errno){
+	printf("\r\nErrno:%d",errno);fflush(stdout);
+	errno = 0;
+        return false;
+    }
 
     va_end(args);
-
+    printf("\r\n###############\r\n");
     return true;
 }
 
@@ -93,7 +132,32 @@ bool do_exec_redirect(const char *outputfile, int count, ...)
  *
 */
 
-    va_end(args);
+    pid_t pid = fork();
+    int stat;
 
+   int fds = open (outputfile,O_WRONLY, 0777);
+   if(fds == -1){
+       printf("\r\n Open file error");
+   }
+   dup2(fds,STDOUT_FILENO);
+   close(fds);
+    
+    if(pid == 0){
+        int rn = execv(command[0],command);
+	if(rn < 0){
+	    return false;
+	}
+    } else if(pid != 0){
+	waitpid(pid,&stat,0);
+	if(errno){
+	    return false;
+	}
+    }
+    if(errno){
+      errno = 0;
+      return false;
+    }
+    va_end(args);
+    
     return true;
 }
