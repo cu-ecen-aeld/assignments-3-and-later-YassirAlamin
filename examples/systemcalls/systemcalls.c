@@ -98,8 +98,8 @@ bool do_exec(int count, ...)
         return false;
     }
 
+    printf("\r\n###############\r\n");fflush(stdout);
     va_end(args);
-    printf("\r\n###############\r\n");
     return true;
 }
 
