@@ -66,40 +66,40 @@ bool do_exec(int count, ...)
  *   as second argument to the execv() command.
  *
 */
-    printf("\r\n-----------------\r\n");fflush(stdout);
+//    printf("\r\n-----------------\r\n");fflush(stdout);
 
     pid_t pid;
     pid  = fork();
     
     if(pid == 0){
-	for(int i=0;i<count;i++){
-	    printf("cmd[%d]:%s\r\n",i,command[i]);fflush(stdout);
-	}
-	printf("\r\n[Child]\t");fflush(stdout);
+//	for(int i=0;i<count;i++){
+//	    printf("cmd[%d]:%s\r\n",i,command[i]);fflush(stdout);
+//	}
+//	printf("\r\n[Child]\t");fflush(stdout);
     	int rn = execv(command[0],command);
-	printf("rn:%d\t",rn);fflush(stdout);
+//	printf("rn:%d\t",rn);fflush(stdout);
 	if(rn == -1){
-	    printf("nexecv() Error:%d",rn);fflush(stdout);
+//	    printf("nexecv() Error:%d",rn);fflush(stdout);
 	    return false;
 	}
-	printf("\r\n.\r\n");fflush(stdout);
+//	printf("\r\n.\r\n");fflush(stdout);
     } else{
 	int pstatus,ret;
         ret = waitpid(pid,&pstatus,0);
-	printf("\r\n[parent] pid:%d ret:%d errno:%d\r\n",pid,ret,errno);fflush(stdout);
+//	printf("\r\n[parent] pid:%d ret:%d errno:%d\r\n",pid,ret,errno);fflush(stdout);
 	if(ret == -1){
-	    printf("\r\nwait() Error:%d\r\n",ret);fflush(stdout);
+//	    printf("\r\nwait() Error:%d\r\n",ret);fflush(stdout);
 	    return false;
 	}
     }
     if(errno){
-	printf("\r\nErrno:%d",errno);fflush(stdout);
+//	printf("\r\nErrno:%d",errno);fflush(stdout);
 	errno = 0;
         return false;
     }
 
     va_end(args);
-    printf("\r\n###############\r\n");
+//    printf("\r\n###############\r\n");
     return true;
 }
 
