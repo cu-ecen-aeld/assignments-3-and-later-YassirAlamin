@@ -68,8 +68,8 @@ bool do_exec(int count, ...)
 */
     printf("\r\n-----------------\r\n");fflush(stdout);
 
-    pid_t pid;
-    pid  = fork();
+    pid_t pid  = fork();
+
     
     if(pid == 0){
 	for(int i=0;i<count;i++){
