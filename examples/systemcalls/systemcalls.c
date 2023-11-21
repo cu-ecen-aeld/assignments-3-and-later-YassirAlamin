@@ -2,9 +2,12 @@
 #include <stdlib.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <sys/time.h>
 #include <unistd.h>
 #include <errno.h>
 #include <fcntl.h>
+#include <signal.h>
+
 /**
  * @param cmd the command to execute with system()
  * @return true if the command in @param cmd was executed
@@ -67,34 +70,41 @@ bool do_exec(int count, ...)
  *
 */
     printf("\r\n-----------------\r\n");fflush(stdout);
-
-    pid_t pid  = fork();
-
+    int rn;
+    pid_t pid_1  = fork();
+//    printf("\r\n[%d]fork()\r\n",pid_1);
     
-    if(pid == 0){
-	for(int i=0;i<count;i++){
-	    printf("cmd[%d]:%s\r\n",i,command[i]);fflush(stdout);
-	}
-	printf("\r\n[Child]\t");fflush(stdout);
-    	int rn = execv(command[0],command);
-	printf("rn:%d\t",rn);fflush(stdout);
-	if(rn == -1){
-	    printf("nexecv() Error:%d",rn);fflush(stdout);
-	    return false;
-	}
-	printf("\r\n.\r\n");fflush(stdout);
+    if(pid_1 == 0){
+//	for(int i=0;i<count;i++){
+//	    printf("cmd[%d]:%s\r\n",i,command[i]);fflush(stdout);
+//	}
+//	printf("\r\n[Child]\t");fflush(stdout);
+    	rn = execv(command[0],command);
+//	printf("rn:%d\t",rn);fflush(stdout);
+//	if(rn == -1){
+//	    printf("nexecv() Error:%d",rn);fflush(stdout);
+//	    return false;
+//	}
+//	printf("\r\n.\r\n");fflush(stdout);
     } else{
 	int pstatus,ret;
-        ret = waitpid(pid,&pstatus,0);
-	printf("\r\n[parent] pid:%d ret:%d errno:%d\r\n",pid,ret,errno);fflush(stdout);
+	struct timeval tv;
+        ret = waitpid(pid_1,&pstatus,0);
+	if(gettimeofday(&tv, NULL) != -1){
+	    printf("\r\nget time:%ld\r\n",tv.tv_usec);		
+	}else{
+	    printf("\r\nTime error\r\n");
+	}
+	printf("\r\n[parent] pid:%d ret:%d WStatus:%d errno:%d\r\n",pid_1,ret,pstatus,errno);fflush(stdout);
 	if(ret == -1){
-	    printf("\r\nwait() Error:%d\r\n",ret);fflush(stdout);
+//	    printf("\r\nwait() Error:%d\r\n",ret);fflush(stdout);
 	    return false;
 	}
     }
-    if(errno){
-	printf("\r\nErrno:%d",errno);fflush(stdout);
+    if(errno || rn == -1){
+	printf("\r\nChild Errno:%d",errno);fflush(stdout);
 	errno = 0;
+	if(kill(pid_1,SIGTERM) == 0)printf("\r\nKill() Erorr\r\n");
         return false;
     }
 
@@ -110,6 +120,9 @@ bool do_exec(int count, ...)
 */
 bool do_exec_redirect(const char *outputfile, int count, ...)
 {
+    
+    printf("\r\n@@@@@@@@@@@\r\n");
+    fflush(stdout);
     va_list args;
     va_start(args, count);
     char * command[count+1];
