@@ -70,44 +70,34 @@ bool do_exec(int count, ...)
  *
 */
     printf("\r\n-----------------\r\n");fflush(stdout);
-    int rn;
-    pid_t pid_1  = fork();
-//    printf("\r\n[%d]fork()\r\n",pid_1);
+    for(int i=0;i<count;i++){
+	    printf("cmd[%d]:%s\r\n",i,command[i]);fflush(stdout);
+    }
     
-    if(pid_1 == 0){
-//	for(int i=0;i<count;i++){
-//	    printf("cmd[%d]:%s\r\n",i,command[i]);fflush(stdout);
-//	}
-//	printf("\r\n[Child]\t");fflush(stdout);
-    	rn = execv(command[0],command);
-//	printf("rn:%d\t",rn);fflush(stdout);
-//	if(rn == -1){
-//	    printf("nexecv() Error:%d",rn);fflush(stdout);
-//	    return false;
-//	}
-//	printf("\r\n.\r\n");fflush(stdout);
-    } else{
+    pid_t pid_1  = fork();
+    
+   if(pid_1 < 0){
+   	perror("fork");
+	exit(EXIT_FAILURE);
+   }    
+   if(pid_1 == 0){
+    	int rn = execv(command[0],command);
+	printf("\r\n[child]rn:%d\terrno:%d\tpid:%d\r\n",rn,errno,pid_1);fflush(stdout);
+	perror("execv");fflush(stdout);
+	exit(EXIT_FAILURE);	
+    }else if(pid_1 > 0){
 	int pstatus,ret;
-	struct timeval tv;
-        ret = waitpid(pid_1,&pstatus,0);
-	if(gettimeofday(&tv, NULL) != -1){
-	    printf("\r\nget time:%ld\r\n",tv.tv_usec);		
-	}else{
-	    printf("\r\nTime error\r\n");
+        ret = waitpid(0,&pstatus,0);
+	printf("\r\n[Parent]ret:%d\t errnno:%d\r\n",ret,errno);fflush(stdout);
+	
+	if(WIFEXITED(pstatus)){
+	    if(WEXITSTATUS(pstatus)){
+		printf("child exit with status:%d, ret:%d\r\n",WEXITSTATUS(pstatus),ret);
+		return false;
+	    }
 	}
-	printf("\r\n[parent] pid:%d ret:%d WStatus:%d errno:%d\r\n",pid_1,ret,pstatus,errno);fflush(stdout);
-	if(ret == -1){
-//	    printf("\r\nwait() Error:%d\r\n",ret);fflush(stdout);
-	    return false;
-	}
-    }
-    if(errno || rn == -1){
-	printf("\r\nChild Errno:%d",errno);fflush(stdout);
-	errno = 0;
-	if(kill(pid_1,SIGTERM) == 0)printf("\r\nKill() Erorr\r\n");
-        return false;
-    }
-
+   }
+       
     printf("\r\n###############\r\n");fflush(stdout);
     va_end(args);
     return true;
@@ -155,21 +145,22 @@ bool do_exec_redirect(const char *outputfile, int count, ...)
    dup2(fds,STDOUT_FILENO);
    close(fds);
     
-    if(pid == 0){
-        int rn = execv(command[0],command);
-	if(rn < 0){
-	    return false;
+    if(pid < 0){
+   	perror("fork");
+	exit(EXIT_FAILURE);
+   }    
+   if(pid == 0){
+    	execv(command[0],command);
+	exit(EXIT_FAILURE);	
+    }else if(pid > 0){
+        waitpid(pid,&stat,0);
+	if(WIFEXITED(stat)){
+	    if(WEXITSTATUS(stat)){
+		return false;
+	    }
 	}
-    } else if(pid != 0){
-	waitpid(pid,&stat,0);
-	if(errno){
-	    return false;
-	}
-    }
-    if(errno){
-      errno = 0;
-      return false;
-    }
+   }
+    
     va_end(args);
     
     return true;
