@@ -127,14 +127,11 @@ ${CC_PATH}/${CROSS_COMPILE}readelf -a bin/busybox | grep "Shared library"
 # TODO: Create initramfs.cpio.gz
     echo "Create initramfs.cpio.gz"
     cd ${OUTDIR}/rootfs
-    pwd
     find . | cpio -H newc -ov --owner root:root > ../initramfs.cpio
     cd ..
     if [ -e initramfs.cpio.gz ]; then
             sudo rm initramfs.cpio.gz
     fi
 
-    pwd
     gzip initramfs.cpio
-    echo "End"
     
