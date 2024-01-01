@@ -119,6 +119,7 @@ ${CC_PATH}/${CROSS_COMPILE}readelf -a bin/busybox | grep "Shared library"
     cp -a /home/yassir/AELD/assignment-1-YassirAlamin/finder-app/autorun-qemu.sh /${OUTDIR}/rootfs/home
 
     cp /${OUTDIR}/rootfs/home/finder.sh /${OUTDIR}/rootfs/usr/bin
+    cp /${OUTDIR}/rootfs/home/writer-cross /${OUTDIR}/rootfs/usr/bin
     cp /${OUTDIR}/rootfs/home/writer /${OUTDIR}/rootfs/usr/bin
 
 # TODO: Chown the root directory
