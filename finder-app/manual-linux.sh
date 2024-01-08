@@ -36,8 +36,10 @@ if [ ! -e ${OUTDIR}/linux-stable/arch/${ARCH}/boot/Image ]; then
     git checkout ${KERNEL_VERSION}
 
     # TODO: Add your kernel build steps here
-    
-    make ARCH=arm64 CROSS_COMPILE=${CC_PATH}/aarch64-none-linux-gnu- mrproper			# Deep clean
+    echo "Build kernel"
+    pwd
+
+    sudo  make ARCH=arm64 CROSS_COMPILE=${CC_PATH}/aarch64-none-linux-gnu- mrproper			# Deep clean
     sudo make ARCH=arm64 CROSS_COMPILE=${CC_PATH}/aarch64-none-linux-gnu- defconfig			# Configure for our “virt"
     sudo make -j2 ARCH=arm64 CROSS_COMPILE=${CC_PATH}/aarch64-none-linux-gnu- all			# Build a kernel image for booting with QEMU
     # make ARCH=arm64 CROSS_COMPILE=${CC_PATH}/aarch64-none-linux-gnu- modules			# Build any kernel modules
