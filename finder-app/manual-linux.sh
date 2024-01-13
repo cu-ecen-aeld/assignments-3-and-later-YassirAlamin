@@ -37,6 +37,7 @@ if [ ! -e ${OUTDIR}/linux-stable/arch/${ARCH}/boot/Image ]; then
 
     # TODO: Add your kernel build steps here
     echo "Build kernel"
+    echo ${PATH}
     pwd
 
     sudo make ARCH=arm64 CROSS_COMPILE=${CROSS_COMPILE} mrproper			# Deep clean
