@@ -79,12 +79,12 @@ else
 fi
 
 # TODO: Make and install busybox
-    sudo make ARCH=${ARCH} CROSS_COMPILE=${CC_PATH}/${CROSS_COMPILE}
-    sudo make CONFIG_PREFIX=${OUTDIR}/rootfs ARCH=${ARCH} CROSS_COMPILE=${CC_PATH}/${CROSS_COMPILE} install
+    sudo make ARCH=${ARCH} CROSS_COMPILE=${CROSS_COMPILE}
+    sudo make CONFIG_PREFIX=${OUTDIR}/rootfs ARCH=${ARCH} CROSS_COMPILE=${CROSS_COMPILE} install
 echo "Library dependencies"
 cd /${OUTDIR}/rootfs
-${CC_PATH}/${CROSS_COMPILE}readelf -a bin/busybox | grep "program interpreter"
-${CC_PATH}/${CROSS_COMPILE}readelf -a bin/busybox | grep "Shared library"
+${CROSS_COMPILE}readelf -a bin/busybox | grep "program interpreter"
+${CROSS_COMPILE}readelf -a bin/busybox | grep "Shared library"
 
 # TODO: Add library dependencies to rootfs
     export SYSROOT=`${CC_PATH}/aarch64-none-linux-gnu-gcc -print-sysroot`
@@ -105,8 +105,8 @@ ${CC_PATH}/${CROSS_COMPILE}readelf -a bin/busybox | grep "Shared library"
     if [ -e writer-cross ]; then
         sudo rm writer-cross
     fi
-    sudo ${CC_PATH}/${CROSS_COMPILE}gcc writer.c -o writer    
-    sudo ${CC_PATH}/${CROSS_COMPILE}gcc writer.c -o writer-cross
+    sudo ${CROSS_COMPILE}gcc writer.c -o writer    
+    sudo ${CROSS_COMPILE}gcc writer.c -o writer-cross
 
 # TODO: Copy the finder related scripts and executables to the /home directory
 # on the target rootfs
