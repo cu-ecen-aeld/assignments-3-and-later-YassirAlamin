@@ -39,11 +39,11 @@ if [ ! -e ${OUTDIR}/linux-stable/arch/${ARCH}/boot/Image ]; then
     echo "Build kernel"
     pwd
 
-    sudo make ARCH=arm64 CROSS_COMPILE=${CC_PATH}/aarch64-none-linux-gnu- mrproper			# Deep clean
-    sudo make ARCH=arm64 CROSS_COMPILE=${CC_PATH}/aarch64-none-linux-gnu- defconfig			# Configure for our “virt"
-    sudo make -j2 ARCH=arm64 CROSS_COMPILE=${CC_PATH}/aarch64-none-linux-gnu- all			# Build a kernel image for booting with QEMU
-    # make ARCH=arm64 CROSS_COMPILE=${CC_PATH}/aarch64-none-linux-gnu- modules			# Build any kernel modules
-    sudo make ARCH=arm64 CROSS_COMPILE=${CC_PATH}/aarch64-none-linux-gnu- dtbs 				# Build the devicetree
+    sudo make ARCH=arm64 CROSS_COMPILE=${CROSS_COMPILE} mrproper			# Deep clean
+    sudo make ARCH=arm64 CROSS_COMPILE=${CROSS_COMPILE} defconfig			# Configure for our “virt"
+    sudo make -j2 ARCH=arm64 CROSS_COMPILE=${CROSS_COMPILE} all			# Build a kernel image for booting with QEMU
+    # make ARCH=arm64 CROSS_COMPILE=${CROSS_COMPILE} modules			# Build any kernel modules
+    sudo make ARCH=arm64 CROSS_COMPILE=${CROSS_COMPILE} dtbs 				# Build the devicetree
 
 fi
 
