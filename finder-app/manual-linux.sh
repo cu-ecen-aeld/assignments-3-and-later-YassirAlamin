@@ -12,7 +12,7 @@ BUSYBOX_VERSION=1_33_1
 FINDER_APP_DIR=$(realpath $(dirname $0))
 ARCH=arm64
 CROSS_COMPILE=aarch64-none-linux-gnu-
-CC_PATH=/home/yassir/AELD/Cross_compiler/aarch64-none-linux-gnu/bin
+CC_PATH=/home/yassir/AELD/Cross_compiler/gcc-arm-10.2-2020.11-x86_64-aarch64-none-linux-gnu/bin
 
 if [ $# -lt 1 ]
 then
@@ -36,8 +36,9 @@ if [ ! -e ${OUTDIR}/linux-stable/arch/${ARCH}/boot/Image ]; then
     git checkout ${KERNEL_VERSION}
 
     # TODO: Add your kernel build steps here
-    
+ 
     echo "Build kernel"
+    export PATH=${CC_PATH}:$PATH
     echo $PATH
     pwd
     ls -al
