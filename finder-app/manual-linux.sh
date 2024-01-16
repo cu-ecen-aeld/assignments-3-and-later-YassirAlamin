@@ -36,9 +36,12 @@ if [ ! -e ${OUTDIR}/linux-stable/arch/${ARCH}/boot/Image ]; then
     git checkout ${KERNEL_VERSION}
 
     # TODO: Add your kernel build steps here
+    
     echo "Build kernel"
-    echo ${PATH}
+    echo $PATH
     pwd
+    ls -al
+    env
 
     sudo make ARCH=arm64 CROSS_COMPILE=${CROSS_COMPILE} mrproper			# Deep clean
     sudo make ARCH=arm64 CROSS_COMPILE=${CROSS_COMPILE} defconfig			# Configure for our “virt"
