@@ -44,7 +44,7 @@ if [ ! -e ${OUTDIR}/linux-stable/arch/${ARCH}/boot/Image ]; then
     ls -al
     env
 
-    sudo make ARCH=arm64 CC=${CROSS_COMPILE} mrproper			# Deep clean
+    make ARCH=arm64 CC=${CROSS_COMPILE} mrproper			# Deep clean
     sudo make ARCH=arm64 CC=${CROSS_COMPILE} defconfig			# Configure for our “virt"
     sudo make -j2 ARCH=arm64 CC=${CROSS_COMPILE} all			# Build a kernel image for booting with QEMU
     # make ARCH=arm64 CC=${CROSS_COMPILE} modules			# Build any kernel modules
