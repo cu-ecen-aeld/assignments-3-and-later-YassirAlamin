@@ -12,7 +12,8 @@ BUSYBOX_VERSION=1_33_1
 FINDER_APP_DIR=$(realpath $(dirname $0))
 ARCH=arm64
 CROSS_COMPILE=aarch64-none-linux-gnu-
-CC_PATH=/home/yassir/AELD/Cross_compiler/gcc-arm-10.2-2020.11-x86_64-aarch64-none-linux-gnu/bin
+#CC_PATH=/home/yassir/AELD/Cross_compiler/gcc-arm-10.2-2020.11-x86_64-aarch64-none-linux-gnu/bin
+CC_PATH=/usr/local/arm-cross-compiler/install/gcc-arm-10.2-2020.11-x86_64-aarch64-none-linux-gnu/bin
 
 if [ $# -lt 1 ]
 then
@@ -44,11 +45,11 @@ if [ ! -e ${OUTDIR}/linux-stable/arch/${ARCH}/boot/Image ]; then
     ls -al
     env
 
-    sudo make ARCH=arm64 CROSS_COMPILE=${CROSS_COMPILE} mrproper			# Deep clean
-    sudo make ARCH=arm64 CROSS_COMPILE=${CROSS_COMPILE} defconfig			# Configure for our “virt"
-    sudo make -j2 ARCH=arm64 CROSS_COMPILE=${CROSS_COMPILE} all			# Build a kernel image for booting with QEMU
-    # make ARCH=arm64 CROSS_COMPILE=${CROSS_COMPILE} modules			# Build any kernel modules
-    sudo make ARCH=arm64 CROSS_COMPILE=${CROSS_COMPILE} dtbs 				# Build the devicetree
+    sudo make ARCH=arm64 CROSS_COMPILE=${CC_PATH}/${CROSS_COMPILE} mrproper			# Deep clean
+    sudo make ARCH=arm64 CROSS_COMPILE=${CC_PATH}/${CROSS_COMPILE} defconfig			# Configure for our “virt"
+    sudo make -j2 ARCH=arm64 CROSS_COMPILE=${CC_PATH}/${CROSS_COMPILE} all			# Build a kernel image for booting with QEMU
+    # make ARCH=arm64 CROSS_COMPILE=${CC_PATH}/${CROSS_COMPILE} modules			# Build any kernel modules
+    sudo make ARCH=arm64 CROSS_COMPILE=${CC_PATH}/${CROSS_COMPILE} dtbs 				# Build the devicetree
 
 fi
 
@@ -110,8 +111,8 @@ ${CROSS_COMPILE}readelf -a bin/busybox | grep "Shared library"
     if [ -e writer-cross ]; then
         sudo rm writer-cross
     fi
-    sudo ${CROSS_COMPILE}gcc writer.c -o writer    
-    sudo ${CROSS_COMPILE}gcc writer.c -o writer-cross
+    sudo ${CC_PATH}/${CROSS_COMPILE}gcc writer.c -o writer    
+    sudo ${CC_PATH}/${CROSS_COMPILE}gcc writer.c -o writer-cross
 
 # TODO: Copy the finder related scripts and executables to the /home directory
 # on the target rootfs
