@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # Script outline to install and build kernel.
 # Author: Siddhant Jajoo.
 
