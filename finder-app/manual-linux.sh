@@ -104,7 +104,8 @@ ${CROSS_COMPILE}readelf -a bin/busybox | grep "Shared library"
     sudo mknod -m 666 dev/null c 1 3
     sudo mknod -m 600 dev/console c 5 1
 # TODO: Clean and build the writer utility
-    cd /home/yassir/AELD/assignment-1-YassirAlamin/finder-app
+    pwd
+    cd /home/yassir/AELD/assignment-1-YassirAlamin/finder-app/
     if [  -e *.o ]; then
         sudo rm *.o
     fi
