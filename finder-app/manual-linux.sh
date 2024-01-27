@@ -54,7 +54,7 @@ if [ ! -e ${OUTDIR}/linux-stable/arch/${ARCH}/boot/Image ]; then
 fi
 
 echo "Adding the Image in outdir"
-    cp -a /${OUTDIR}/linux-stable/arch/${ARCH}/boot/Image /${OUTDIR}/
+    cp -a ${OUTDIR}/linux-stable/arch/${ARCH}/boot/Image ${OUTDIR}/
 
 echo "Creating the staging directory for the root filesystem"
 cd "$OUTDIR"
@@ -65,8 +65,8 @@ then
 fi
 
 # TODO: Create necessary base directories
-    sudo mkdir -p /${OUTDIR}/rootfs
-    cd /${OUTDIR}/rootfs
+    sudo mkdir -p ${OUTDIR}/rootfs
+    cd ${OUTDIR}/rootfs
     sudo mkdir -p bin dev etc home lib lib64 proc sbin sys tmp usr var
     sudo mkdir -p usr/bin usr/lib usr/sbin
     sudo mkdir -p var/log 
@@ -91,15 +91,15 @@ fi
     export PATH=${CC_PATH}:$PATH
 
 echo "Library dependencies"
-cd /${OUTDIR}/rootfs
+cd ${OUTDIR}/rootfs
 ${CROSS_COMPILE}readelf -a bin/busybox | grep "program interpreter"
 ${CROSS_COMPILE}readelf -a bin/busybox | grep "Shared library"
 
 # TODO: Add library dependencies to rootfs
     export SYSROOT=`${CC_PATH}/aarch64-none-linux-gnu-gcc -print-sysroot`
-    cd  /${OUTDIR}/rootfs
-    cp -a ${SYSROOT}/lib/ /${OUTDIR}/rootfs/
-    cp -a ${SYSROOT}/lib64/ /${OUTDIR}/rootfs/
+    cd  ${OUTDIR}/rootfs
+    cp -a ${SYSROOT}/lib/ ${OUTDIR}/rootfs/
+    cp -a ${SYSROOT}/lib64/ ${OUTDIR}/rootfs/
 # TODO: Make device nodes
     sudo mknod -m 666 dev/null c 1 3
     sudo mknod -m 600 dev/console c 5 1
@@ -122,17 +122,17 @@ ${CROSS_COMPILE}readelf -a bin/busybox | grep "Shared library"
 # on the target rootfs
     echo "Copy finder Dir"
 
-    cp -a /home/yassir/AELD/assignment-1-YassirAlamin/finder-app/writer-cross /${OUTDIR}/rootfs/home
-    cp -a /home/yassir/AELD/assignment-1-YassirAlamin/finder-app/writer /${OUTDIR}/rootfs/home
-    cp -a /home/yassir/AELD/assignment-1-YassirAlamin/conf /${OUTDIR}/rootfs/home
-    cp -a /home/yassir/AELD/assignment-1-YassirAlamin/finder-app/finder.sh /${OUTDIR}/rootfs/home
-    cp -a /home/yassir/AELD/assignment-1-YassirAlamin/finder-app/finder-test.sh /${OUTDIR}/rootfs/home
-    cp -a /home/yassir/AELD/assignment-1-YassirAlamin/finder-app/writer.sh /${OUTDIR}/rootfs/home
-    cp -a /home/yassir/AELD/assignment-1-YassirAlamin/finder-app/autorun-qemu.sh /${OUTDIR}/rootfs/home
+    cp -a /home/yassir/AELD/assignment-1-YassirAlamin/finder-app/writer-cross ${OUTDIR}/rootfs/home
+    cp -a /home/yassir/AELD/assignment-1-YassirAlamin/finder-app/writer ${OUTDIR}/rootfs/home
+    cp -a /home/yassir/AELD/assignment-1-YassirAlamin/conf ${OUTDIR}/rootfs/home
+    cp -a /home/yassir/AELD/assignment-1-YassirAlamin/finder-app/finder.sh ${OUTDIR}/rootfs/home
+    cp -a /home/yassir/AELD/assignment-1-YassirAlamin/finder-app/finder-test.sh ${OUTDIR}/rootfs/home
+    cp -a /home/yassir/AELD/assignment-1-YassirAlamin/finder-app/writer.sh ${OUTDIR}/rootfs/home
+    cp -a /home/yassir/AELD/assignment-1-YassirAlamin/finder-app/autorun-qemu.sh ${OUTDIR}/rootfs/home
 
-    cp /${OUTDIR}/rootfs/home/finder.sh /${OUTDIR}/rootfs/usr/bin
-    cp /${OUTDIR}/rootfs/home/writer-cross /${OUTDIR}/rootfs/usr/bin
-    cp /${OUTDIR}/rootfs/home/writer /${OUTDIR}/rootfs/usr/bin
+    cp ${OUTDIR}/rootfs/home/finder.sh ${OUTDIR}/rootfs/usr/bin
+    cp ${OUTDIR}/rootfs/home/writer-cross ${OUTDIR}/rootfs/usr/bin
+    cp ${OUTDIR}/rootfs/home/writer ${OUTDIR}/rootfs/usr/bin
 
 # TODO: Chown the root directory
     echo "chown root dir"
