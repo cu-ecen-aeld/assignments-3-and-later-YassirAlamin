@@ -85,8 +85,11 @@ else
 fi
 
 # TODO: Make and install busybox
-    sudo make ARCH=${ARCH} CROSS_COMPILE=${CROSS_COMPILE}
-    sudo make CONFIG_PREFIX=${OUTDIR}/rootfs ARCH=${ARCH} CROSS_COMPILE=${CROSS_COMPILE} install
+    echo "Install busybox"
+    sudo make ARCH=${ARCH} CROSS_COMPILE=${CC_PATH}/${CROSS_COMPILE}
+    sudo make CONFIG_PREFIX=${OUTDIR}/rootfs ARCH=${ARCH} CROSS_COMPILE=${CC_PATH}/${CROSS_COMPILE} install
+    export PATH=${CC_PATH}:$PATH
+
 echo "Library dependencies"
 cd /${OUTDIR}/rootfs
 ${CROSS_COMPILE}readelf -a bin/busybox | grep "program interpreter"
