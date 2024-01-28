@@ -105,7 +105,7 @@ ${CROSS_COMPILE}readelf -a bin/busybox | grep "Shared library"
     sudo mknod -m 600 dev/console c 5 1
 # TODO: Clean and build the writer utility
     pwd
-    cd /home/yassir/AELD/assignment-1-YassirAlamin/finder-app/
+    cd ~/AELD/assignment-1-YassirAlamin/finder-app/
     if [  -e *.o ]; then
         sudo rm *.o
     fi
@@ -122,13 +122,13 @@ ${CROSS_COMPILE}readelf -a bin/busybox | grep "Shared library"
 # on the target rootfs
     echo "Copy finder Dir"
 
-    cp -a /home/yassir/AELD/assignment-1-YassirAlamin/finder-app/writer-cross ${OUTDIR}/rootfs/home
-    cp -a /home/yassir/AELD/assignment-1-YassirAlamin/finder-app/writer ${OUTDIR}/rootfs/home
-    cp -a /home/yassir/AELD/assignment-1-YassirAlamin/conf ${OUTDIR}/rootfs/home
-    cp -a /home/yassir/AELD/assignment-1-YassirAlamin/finder-app/finder.sh ${OUTDIR}/rootfs/home
-    cp -a /home/yassir/AELD/assignment-1-YassirAlamin/finder-app/finder-test.sh ${OUTDIR}/rootfs/home
-    cp -a /home/yassir/AELD/assignment-1-YassirAlamin/finder-app/writer.sh ${OUTDIR}/rootfs/home
-    cp -a /home/yassir/AELD/assignment-1-YassirAlamin/finder-app/autorun-qemu.sh ${OUTDIR}/rootfs/home
+    cp -a ~/AELD/assignment-1-YassirAlamin/finder-app/writer-cross ${OUTDIR}/rootfs/home
+    cp -a ~/AELD/assignment-1-YassirAlamin/finder-app/writer ${OUTDIR}/rootfs/home
+    cp -a ~/AELD/assignment-1-YassirAlamin/conf ${OUTDIR}/rootfs/home
+    cp -a ~/AELD/assignment-1-YassirAlamin/finder-app/finder.sh ${OUTDIR}/rootfs/home
+    cp -a ~/AELD/assignment-1-YassirAlamin/finder-app/finder-test.sh ${OUTDIR}/rootfs/home
+    cp -a ~/AELD/assignment-1-YassirAlamin/finder-app/writer.sh ${OUTDIR}/rootfs/home
+    cp -a ~/AELD/assignment-1-YassirAlamin/finder-app/autorun-qemu.sh ${OUTDIR}/rootfs/home
 
     cp ${OUTDIR}/rootfs/home/finder.sh ${OUTDIR}/rootfs/usr/bin
     cp ${OUTDIR}/rootfs/home/writer-cross ${OUTDIR}/rootfs/usr/bin
