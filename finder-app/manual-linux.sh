@@ -107,11 +107,11 @@ ${CROSS_COMPILE}readelf -a bin/busybox | grep "Shared library"
     pwd
     cd ${FINDER_APP_DIR}
     pwd
-    if [ -e writer ] then
-	    sudo rm -rf writer
+    if [ -e writer ]; then
+	    sudo rm writer
     fi
-    if [ -e writer-cross ] then
-	    sudo rm -rf writer-cross
+    if [ -e writer-cross ]; then
+	    sudo rm writer-cross
     fi
     sudo make ARCH=arm64 CROSS_COMPILER=${CC_PATH}/${CROSS_COMPILE}
     sudo ${CC_PATH}/${CROSS_COMPILE}gcc writer.c -o writer    
